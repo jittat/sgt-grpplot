@@ -27,7 +27,8 @@ def main():
     e3 = v[2]
     
     px = [e2[i,0] for i in range(n)]
-    py = [random() for i in range(n)]
+    #py = [random() for i in range(n)]
+    py = [e3[i,0] for i in range(n)]
 
     plot(n,a,px,py)
     raw_input()

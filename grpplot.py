@@ -1,6 +1,6 @@
 from pylab import *
 
-def plot(n, adjmat, px, py):
+def plot(n, adjmat, px, py, c=None):
     lines = []
     for i in range(n):
         for j in range(n):
@@ -12,7 +12,10 @@ def plot(n, adjmat, px, py):
                 lines.append(((px[i],py[i]),(px[j],py[j])))
     ax = gca()
     ax.add_collection(matplotlib.collections.LineCollection(lines))
-    ax.scatter(px,py)
+    if c:
+        ax.scatter(px, py, c=c)
+    else:
+        ax.scatter(px, py)
     plt.ion()
     plt.draw_if_interactive()
     plt.hold(True)

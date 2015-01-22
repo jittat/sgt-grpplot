@@ -13,28 +13,37 @@ def graph_data_from_image(image_filename):
         return y*sx + x
 
     def randedge(cdiff):
-        prob = (1.0 - (cdiff/256.))*10
+        TR = 2.
+        prob = (1.0 - (cdiff/255.)*TR)
+        print prob,
         return random() <= prob
 
     img = misc.imread(image_filename)
     sy,sx = img.shape
     n = sx*sy
 
+    DIRS = [(1,0),(0,1),(1,1),(-1,1)]
+
     adj = []
     for i in range(sx):
         for j in range(sy):
             c = int(img[j][i])
             num = node_num(i,j,sx,sy)
-            if i != sx - 1:
-                rnum = node_num(i+1,j,sx,sy)
-                rc = int(img[j][i+1])
-                if randedge(abs(c - rc)):
-                    adj.append((num, rnum))
-            if j != sy - 1:
-                dnum = node_num(i,j+1,sx,sy)
-                dc = int(img[j+1][i])
-                if randedge(abs(c - dc)):
-                    adj.append((num, dnum))
+
+            for dx,dy in DIRS:
+
+                ni = i + dx
+                nj = j + dy
+                if (ni >= sx) or (nj >= sy):
+                    continue
+                if (ni < 0) or (nj < 0):
+                    continue
+                
+                nnum = node_num(ni,nj,sx,sy)
+                nc = int(img[nj][ni])
+                if randedge(abs(c - nc)):
+                    adj.append((num, nnum))
+
     return n,adj,sx,sy
 
 def sort_eig(w,v,n):
@@ -45,24 +54,27 @@ def sort_eig(w,v,n):
     return outw, outv
 
 def main():
-    n,adjlist,sx,sy = graph_data_from_image('lena-s.png')
+    n,adjlist,sx,sy = graph_data_from_image('ccc-s.png')
     print n, len(adjlist)
 
     a = adjmat(n,adjlist)
     d = degmat(n,adjlist)
     la = d - a
     w,v = eig(la)
-    print w
     w,v = sort_eig(w,v,n)
-    print w
 
     e2 = v[1]
-    e3 = v[2]
-    
-    px = [e2[i,0] for i in range(n)]
-    py = [random() for i in range(n)]
+    #e3 = v[2]
 
-    plot(n,a,px,py)
+    px = []
+    py = []
+    for i in range(n):
+        x = i % sx
+        y = i / sx
+        px.append(x)
+        py.append(y)
+
+    plot(n,a,px,py,[e2[i,0] for i in range(n)])
     raw_input()
 
 if __name__ == '__main__':
