@@ -74,7 +74,8 @@ def main():
         px.append(x)
         py.append(y)
 
-    plot(n,a,px,py,[e2[i,0] for i in range(n)])
+    aa = adjmat(n,[])
+    plot(n,aa,px,py,[e2[i,0]*100 for i in range(n)])
     raw_input()
 
 if __name__ == '__main__':
