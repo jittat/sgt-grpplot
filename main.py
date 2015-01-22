@@ -6,12 +6,10 @@ from generators import gen_random, gen_line
 from grpplot import plot
 
 def sort_eig(w,v,n):
-    data = [(w[i],v[:,i]) for i in range(n)]
+    data = [(w[i],i) for i in range(n)]
     sdata = sorted(data)
-    for i in range(n):
-        print sdata[i][0]
     outw = [sdata[i][0] for i in range(n)]
-    outv = [sdata[i][1] for i in range(n)]
+    outv = [v[:,sdata[i][1]] for i in range(n)]
     return outw, outv
 
 def main():
@@ -27,9 +25,7 @@ def main():
 
     e2 = v[1]
     e3 = v[2]
-
-    print e3
-
+    
     px = [e2[i,0] for i in range(n)]
     py = [random() for i in range(n)]
 
