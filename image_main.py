@@ -46,12 +46,9 @@ def graph_data_from_image(image_filename):
 
     return n,adj,sx,sy
 
-def sort_eig(w,v,n):
-    data = [(w[i],i) for i in range(n)]
-    sdata = sorted(data)
-    outw = [sdata[i][0] for i in range(n)]
-    outv = [v[:,sdata[i][1]] for i in range(n)]
-    return outw, outv
+def sort_eig(w,v):
+    indexing = w.argsort()
+    return w[indexing], [transpose(vi) for vi in transpose(v[:,indexing])]
 
 def main():
     n,adjlist,sx,sy = graph_data_from_image('ccc-s.png')
@@ -61,7 +58,7 @@ def main():
     d = degmat(n,adjlist)
     la = d - a
     w,v = eig(la)
-    w,v = sort_eig(w,v,n)
+    w,v = sort_eig(w,v)
 
     e2 = v[1]
     #e3 = v[2]

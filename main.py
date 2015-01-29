@@ -5,12 +5,9 @@ from mat import adjmat, degmat
 from generators import gen_random, gen_line
 from grpplot import plot
 
-def sort_eig(w,v,n):
-    data = [(w[i],i) for i in range(n)]
-    sdata = sorted(data)
-    outw = [sdata[i][0] for i in range(n)]
-    outv = [v[:,sdata[i][1]] for i in range(n)]
-    return outw, outv
+def sort_eig(w,v):
+    indexing = w.argsort()
+    return w[indexing], [transpose(vi) for vi in transpose(v[:,indexing])]
 
 def main():
     n = 100
@@ -20,7 +17,7 @@ def main():
     d = degmat(n,adjlist)
     la = d - a
     w,v = eig(la)
-    w,v = sort_eig(w,v,n)
+    w,v = sort_eig(w,v)
     print w
 
     e2 = v[1]
